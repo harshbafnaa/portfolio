@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harsh Bafna | AI Engineer & Founder</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Syne:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f5f5f7; /* Apple-esque clean grey */
+            --text: #1d1d1f;
+            --accent: #000000;
+            --glass: rgba(255, 255, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 3D Canvas */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(245, 245, 247, 0.5);
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .menu a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        .menu a:hover { opacity: 0.6; }
+
+        /* Layout & Typography */
+        main { position: relative; z-index: 1; }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 4rem 10%;
+            position: relative;
+        }
+
+        .container {
+            max-width: 600px;
+            pointer-events: auto; /* Enable clicks on text */
+        }
+
+        /* Alternating layouts for 3D interaction */
+        section:nth-child(odd) .container { margin-right: auto; }
+        section:nth-child(even) .container { margin-left: auto; text-align: right; }
+        section:nth-child(even) .job-item { align-items: flex-end; }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(3rem, 5vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        h4 { font-size: 1rem; color: #666; margin-bottom: 1rem; font-weight: 400; }
+
+        p { margin-bottom: 1.5rem; font-size: 1.1rem; color: #444; }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.8rem;
+            border: 1px solid #ccc;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* Card Styling */
+        .card {
+            background: var(--glass);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            transition: transform 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.9); }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--text);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+        .btn:hover { transform: scale(1.05); }
+
+        /* Loader */
+        #loader {
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: var(--bg);
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+        }
+
+        /* Specific Lists */
+        .job-list, .project-list { display: flex; flex-direction: column; gap: 2rem; }
+        .cert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left; }
+        section:nth-child(even) .cert-grid { direction: rtl; } /* Trick for alignment */
+        section:nth-child(even) .cert-grid > * { direction: ltr; }
+    </style>
+</head>
+<body>
+
+    <div id="loader">HB.</div>
+
+    <nav>
+        <div class="logo">HB.</div>
+        <div class="menu">
+            <a href="#hero">Start</a>
+            <a href="#experience">Experience</a>
+            <a href="#projects">Projects</a>
+            <a href="#certifications">Certs</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <div id="canvas-container"></div>
+
+    <main>
+        <!-- HERO -->
+        <section id="hero">
+            <div class="container">
+                <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem;">Portfolio</p>
+                <h1>Harsh Bafna</h1>
+                <p>AI Engineer & Founder of Terapush.<br>Based in Bengaluru, India.</p>
+                <p style="opacity: 0.7; font-size: 0.95rem;">Building digital experiences with Artificial Intelligence, Machine Learning, and Creative Logic.</p>
+                <a href="#experience" class="btn">View My Work</a>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience">
+            <div class="container">
+                <h2>Experience</h2>
+                <div class="job-list">
+                    <div class="card">
+                        <h3>Founder & Director</h3>
+                        <h4>Terapush | Jan 2021 - Present</h4>
+                        <p>Leading a collaborative platform connecting startups, investors, and freelancers. Driving product innovation and cultivating partnerships in the entrepreneurial ecosystem.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>ML Data Associate</h3>
+                        <h4>Amazon | Apr 2024 - Jul 2025</h4>
+                        <p>Ensured high accuracy for seller searches. Mentored 8 associates and earned the "Rookie Rockstar" award for leadership.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Machine Learning Engineer</h3>
+                        <h4>TechCiti | Jun 2022 - Aug 2022</h4>
+                        <p>Developed ML models using PyTorch. Improved model accuracy through unsupervised learning projects.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects">
+            <div class="container">
+                <h2>Key Projects</h2>
+                <div class="project-list">
+                    <div class="card">
+                        <h3>English to Hinglish Translator</h3>
+                        <p>A Streamlit web app blending Hindi and English using NLP. Custom dictionary support for unique translations.</p>
+                        <span class="tag">Python</span> <span class="tag">Streamlit</span> <span class="tag">NLP</span>
+                    </div>
+
+                    <div class="card">
+                        <h3>Handwritten Digit Recognition</h3>
+                        <p>Computer vision system achieving high accuracy on the MNIST dataset using deep learning architectures.</p>
+                        <span class="tag">Deep Learning</span> <span class="tag">TensorFlow</span>
+                    </div>
+
+                    <div class="card">
+                        <h3>Parking Space Detection</h3>
+                        <p>OpenCV system that counts available parking spots in real-time video feeds.</p>
+                        <span class="tag">OpenCV</span> <span class="tag">Computer Vision</span>
+                    </div>
+
+                    <div class="card">
+                        <h3>Image Hashtag Generator</h3>
+                        <p>Flask app using InceptionV3 to generate relevant hashtags from uploaded images.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EDUCATION & CERTS -->
+        <section id="certifications">
+            <div class="container">
+                <h2>Education & Certs</h2>
+                
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3>B.Tech Artificial Intelligence</h3>
+                    <h4>P P Savani University | 2020 - 2024</h4>
+                </div>
+
+                <h3>Certifications</h3>
+                <div class="cert-grid">
+                    <div class="tag">IBM Cybersecurity Analyst</div>
+                    <div class="tag">IBM Data Science</div>
+                    <div class="tag">AWS Cloud Foundations</div>
+                    <div class="tag">Tableau Analyst</div>
+                    <div class="tag">Python (HackerRank)</div>
+                    <div class="tag">Data Analytics on AWS</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact">
+            <div class="container">
+                <h2>Let's Connect</h2>
+                <p>I am open to freelance work and full-time opportunities in AI/ML.</p>
+                <div style="margin-top: 2rem;">
+                    <a href="mailto:harsh@example.com" class="btn">Email Me</a>
+                    <a href="https://linkedin.com/in/bafnaharsh" target="_blank" class="btn" style="background: #0077b5;">LinkedIn</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        /* -------------------------------------------------------------------------- */
+        /*                               THREE.JS SETUP                               */
+        /* -------------------------------------------------------------------------- */
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf5f5f7);
+        scene.fog = new THREE.Fog(0xf5f5f7, 10, 40);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 1, 12);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        /* -------------------------------------------------------------------------- */
+        /*                                LIGHTING                                    */
+        /* -------------------------------------------------------------------------- */
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(5, 10, 5);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 1024;
+        dirLight.shadow.mapSize.height = 1024;
+        scene.add(dirLight);
+
+        /* -------------------------------------------------------------------------- */
+        /*                            NEAT STICKMAN RIG                               */
+        /* -------------------------------------------------------------------------- */
+        const stickmanGroup = new THREE.Group();
+        scene.add(stickmanGroup);
+
+        // Materials
+        const skinMat = new THREE.MeshStandardMaterial({ 
+            color: 0x1a1a1a, 
+            roughness: 0.4, 
+            metalness: 0.2 
+        });
+
+        // Helper: Create a "Capsule" limb (Cylinder with spheres at ends)
+        function createLimb(length, radius) {
+            const group = new THREE.Group(); // Pivot point
+            
+            // The bone
+            const cylGeo = new THREE.CylinderGeometry(radius, radius, length, 16);
+            const cyl = new THREE.Mesh(cylGeo, skinMat);
+            cyl.position.y = -length / 2;
+            cyl.castShadow = true;
+
+            // The joint (visual only, at the top)
+            const jointGeo = new THREE.SphereGeometry(radius, 16, 16);
+            const joint = new THREE.Mesh(jointGeo, skinMat);
+            
+            // The bottom joint (elbow/knee visual)
+            const jointBottom = new THREE.Mesh(jointGeo, skinMat);
+            jointBottom.position.y = -length;
+
+            group.add(joint);
+            group.add(cyl);
+            group.add(jointBottom);
+
+            return { group, mesh: cyl, length };
+        }
+
+        // --- Construction ---
+        
+        // 1. Hips (Root)
+        const hips = new THREE.Group();
+        stickmanGroup.add(hips);
+        
+        // Hip Joint Visual
+        const hipGeo = new THREE.SphereGeometry(0.26, 16, 16);
+        const hipMesh = new THREE.Mesh(hipGeo, skinMat);
+        hips.add(hipMesh);
+
+        // 2. Torso
+        const torsoLen = 1.4;
+        const torso = createLimb(torsoLen, 0.22);
+        torso.group.position.y = 0; // Starts at hips
+        // Rotate torso geometry so it grows UP from hips
+        torso.mesh.position.y = torsoLen / 2;
+        torso.group.children[2].position.y = torsoLen; // Top joint
+        hips.add(torso.group);
+
+        // 3. Head
+        const headGroup = new THREE.Group();
+        headGroup.position.y = torsoLen + 0.3; 
+        torso.group.add(headGroup);
+
+        const headGeo = new THREE.SphereGeometry(0.35, 32, 32);
+        const head = new THREE.Mesh(headGeo, skinMat);
+        head.castShadow = true;
+        headGroup.add(head);
+
+        // 4. Arms
+        const armLen = 1.1;
+        const armRadius = 0.11;
+
+        // Right Arm
+        const rArm = createLimb(armLen, armRadius);
+        const rForeArm = createLimb(armLen, armRadius);
+        rArm.group.position.set(0.35, torsoLen - 0.1, 0); // Shoulder
+        rForeArm.group.position.y = -armLen;
+        rArm.group.add(rForeArm.group);
+        torso.group.add(rArm.group);
+
+        // Left Arm
+        const lArm = createLimb(armLen, armRadius);
+        const lForeArm = createLimb(armLen, armRadius);
+        lArm.group.position.set(-0.35, torsoLen - 0.1, 0);
+        lForeArm.group.position.y = -armLen;
+        lArm.group.add(lForeArm.group);
+        torso.group.add(lArm.group);
+
+        // 5. Legs
+        const legLen = 1.3;
+        const legRadius = 0.13;
+
+        // Right Leg
+        const rLeg = createLimb(legLen, legRadius);
+        const rShin = createLimb(legLen, legRadius);
+        rLeg.group.position.set(0.15, 0, 0);
+        rShin.group.position.y = -legLen;
+        rLeg.group.add(rShin.group);
+        hips.add(rLeg.group);
+
+        // Left Leg
+        const lLeg = createLimb(legLen, legRadius);
+        const lShin = createLimb(legLen, legRadius);
+        lLeg.group.position.set(-0.15, 0, 0);
+        lShin.group.position.y = -legLen;
+        lLeg.group.add(lShin.group);
+        hips.add(lLeg.group);
+
+        // Shadow Plane
+        const shadowGeo = new THREE.CircleGeometry(2.5, 32);
+        const shadowMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.08 });
+        const shadow = new THREE.Mesh(shadowGeo, shadowMat);
+        shadow.rotation.x = -Math.PI / 2;
+        shadow.position.y = -2.6;
+        stickmanGroup.add(shadow);
+
+
+        /* -------------------------------------------------------------------------- */
+        /*                           ANIMATION & INTERACTION                          */
+        /* -------------------------------------------------------------------------- */
+        
+        // Mouse Look
+        let mouse = { x: 0, y: 0 };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // Render Loop
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+
+            // Breathing / Idle float
+            stickmanGroup.position.y = Math.sin(time) * 0.05;
+            
+            // Head Look
+            headGroup.rotation.y = THREE.MathUtils.lerp(headGroup.rotation.y, mouse.x * 0.5, 0.1);
+            headGroup.rotation.x = THREE.MathUtils.lerp(headGroup.rotation.x, mouse.y * 0.3, 0.1);
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+
+        /* -------------------------------------------------------------------------- */
+        /*                             GSAP SCROLL LOGIC                              */
+        /* -------------------------------------------------------------------------- */
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- 1. INITIAL POSE (HERO) ---
+        // Waving
+        gsap.set(rArm.group.rotation, { z: 2.5, x: 0.5 }); // Right arm up
+        gsap.set(rForeArm.group.rotation, { z: 0.5 });
+        gsap.set(lArm.group.rotation, { z: -0.2 }); // Left arm relaxed
+        
+        // Wave Loop
+        gsap.to(rForeArm.group.rotation, { 
+            z: 1.8, yoyo: true, repeat: -1, duration: 0.7, ease: "sine.inOut" 
+        });
+
+        // --- 2. TRANSITIONS ---
+
+        // HERO -> EXPERIENCE
+        // Move Stickman Right, Pose: "Working/Thinking"
+        let tlExp = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#experience",
+                start: "top center",
+                end: "bottom center",
+                scrub: 1
+            }
+        });
+
+        tlExp.to(stickmanGroup.position, { x: 3.5, y: -0.5 }, 0)
+             .to(stickmanGroup.rotation, { y: -0.5 }, 0); // Face content
+
+        // Pose Change
+        tlExp.to(rArm.group.rotation, { z: 0.3, x: 0.5 }, 0) // Reset wave
+             .to(rForeArm.group.rotation, { z: 0 }, 0)
+             .to(lArm.group.rotation, { z: -1.5, x: 0.5 }, 0) // Hand to chin
+             .to(lForeArm.group.rotation, { z: -2.0 }, 0)
+             .to(rLeg.group.rotation, { x: -0.5 }, 0) // Walking/Stepping look
+             .to(lLeg.group.rotation, { x: 0.5 }, 0);
+
+        
+        // EXPERIENCE -> PROJECTS
+        // Move Stickman Left, Pose: "Presenting"
+        let tlProj = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#projects",
+                start: "top center",
+                end: "bottom center",
+                scrub: 1
+            }
+        });
+
+        tlProj.to(stickmanGroup.position, { x: -3.5 }, 0)
+              .to(stickmanGroup.rotation, { y: 0.5 }, 0);
+
+        // Pose
+        tlProj.to(lArm.group.rotation, { z: -0.2, x: 0 }, 0) // Reset left
+              .to(lForeArm.group.rotation, { z: 0 }, 0)
+              .to(rArm.group.rotation, { z: 1.5, y: 0.5 }, 0) // Point Right
+              .to(rForeArm.group.rotation, { z: 0 }, 0)
+              .to(rLeg.group.rotation, { x: 0.2 }, 0)
+              .to(lLeg.group.rotation, { x: -0.2 }, 0);
+
+        
+        // PROJECTS -> EDUCATION
+        // Center him, Pose: "Proud/Victory"
+        let tlEdu = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#certifications",
+                start: "top center",
+                end: "bottom center",
+                scrub: 1
+            }
+        });
+
+        tlEdu.to(stickmanGroup.position, { x: 2.5 }, 0)
+             .to(stickmanGroup.rotation, { y: -0.3 }, 0);
+        
+        // Pose: Looking up at certs
+        tlEdu.to(rArm.group.rotation, { z: 0, y: 0, x: 0 }, 0)
+             .to(lArm.group.rotation, { z: 0, y: 0, x: 0 }, 0)
+             .to(headGroup.rotation, { x: -0.5 }, 0); // Look up
+
+        
+        // EDUCATION -> CONTACT
+        // Close up, Handshake
+        let tlContact = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#contact",
+                start: "top center",
+                end: "bottom bottom",
+                scrub: 1
+            }
+        });
+
+        tlContact.to(stickmanGroup.position, { x: 0, z: 4, y: -1 }, 0); // Zoom in
+        
+        // Handshake pose
+        tlContact.to(rArm.group.rotation, { x: 0.5, z: 0.5, y: -0.5 }, 0)
+                 .to(rForeArm.group.rotation, { x: -0.5 }, 0);
+
+
+        // --- UTILS ---
+        window.addEventListener('load', () => {
+            document.getElementById('loader').style.display = 'none';
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+    </script>
+</body>
+</html>
