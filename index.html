@@ -1,98 +1,600 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Harsh Bafna | macOS Portfolio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              mac: {
-                bg: '#000000',
-                window: '#1e1e1eba', // Translucent dark window
-                surface: '#2d2d2d',
-                border: '#424242',
-                accent: '#0A84FF', // System Blue
-                gray: '#98989D',
-                red: '#FF453A',
-                yellow: '#FFD60A',
-                green: '#32D74B',
-                sidebar: '#181818bf', // Sidebar translucency
-              }
-            },
-            fontFamily: {
-              sans: ['-apple-system', 'BlinkMacSystemFont', 'Inter', 'Segoe UI', 'sans-serif'],
-            },
-            boxShadow: {
-              'mac-window': '0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1)',
-              'mac-dock': '0 0 20px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.1)',
-            },
-            backdropBlur: {
-              'xs': '2px',
-            }
-          }
-        }
-      }
-    </script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harsh Bafna | Financial Content Strategist</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-      body {
-        background-color: #000000;
-        color: #FFFFFF;
-        overflow: hidden; /* Desktop shouldn't scroll */
-      }
-      
-      /* macOS Monterey Dark Wallpaper */
-      .macos-wallpaper {
-        background-image: url('https://4kwallpapers.com/images/wallpapers/macos-monterey-stock-purple-dark-mode-layers-5k-6016x6016-5898.jpg');
-        background-size: cover;
-        background-position: center;
-      }
+        :root {
+            --bg-color: #05080f; /* Deep Navy */
+            --card-bg: #0e121b;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --bullish-green: #00e396; /* Finance Green */
+            --angel-red: #ff4560; /* Brand Red */
+            --accent-blue: #008ffb;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
 
-      /* Custom Scrollbar for Mac look */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-        background: transparent;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.4);
-      }
-      
-      /* Utilities */
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 227, 150, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 143, 251, 0.05) 0%, transparent 40%);
+        }
+
+        /* --- Stock Ticker --- */
+        .ticker-wrap {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #020408;
+            height: 30px;
+            overflow: hidden;
+            z-index: 2000;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 20s linear infinite;
+        }
+        .ticker-item {
+            display: inline-block;
+            padding: 0 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .up { color: var(--bullish-green); }
+        .down { color: var(--angel-red); }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 30px; /* Below ticker */
+            width: 100%;
+            padding: 15px 5%;
+            background: rgba(5, 8, 15, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo i { color: var(--bullish-green); }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--bullish-green); }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px 20px 0;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--bullish-green);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            background: rgba(0, 227, 150, 0.1);
+            padding: 5px 15px;
+            border-radius: 4px;
+        }
+
+        .hero p {
+            max-width: 600px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* Stats Grid */
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--bullish-green);
+            opacity: 0.5;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .trend-up {
+            color: var(--bullish-green);
+            font-size: 0.8rem;
+            float: right;
+        }
+
+        /* --- Portfolio Grid --- */
+        section { padding: 100px 10%; }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .section-title::before {
+            content: '//';
+            color: var(--angel-red);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .video-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: 0.4s ease;
+            text-decoration: none;
+            group: 'card';
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--bullish-green);
+            box-shadow: 0 10px 40px -10px rgba(0, 227, 150, 0.2);
+        }
+
+        .thumbnail-container {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .thumbnail-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+
+        .video-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .overlay-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: var(--bullish-green);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            border: 1px solid var(--bullish-green);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-body h3 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .card-body p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .metric-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--angel-red);
+            font-weight: 600;
+        }
+
+        /* --- Experience (Terminal Style) --- */
+        .experience-card {
+            background: rgba(14, 18, 27, 0.6);
+            border-left: 3px solid var(--border-color);
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .experience-card:hover {
+            border-left-color: var(--angel-red);
+            background: var(--card-bg);
+        }
+
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .exp-role {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .exp-company {
+            color: var(--accent-blue);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .internship-tag {
+            background: var(--angel-red);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        .exp-list {
+            list-style: none;
+        }
+
+        .exp-list li {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .exp-list li::before {
+            content: '>';
+            color: var(--bullish-green);
+            margin-right: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* --- Footer --- */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 60px 20px;
+            text-align: center;
+            background: #020408;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: var(--bullish-green);
+            color: #000;
+            padding: 12px 30px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .cta-btn:hover {
+            box-shadow: 0 0 20px rgba(0, 227, 150, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .nav-links { display: none; }
+            .market-stats { grid-template-columns: 1fr; }
+        }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "framer-motion": "https://aistudiocdn.com/framer-motion@^12.23.24",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "recharts": "https://aistudiocdn.com/recharts@^3.5.1"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
+<body>
+
+    <!-- Stock Ticker -->
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item">YOUTUBE SHORTS <span class="up">▲ 400K+</span></div>
+            <div class="ticker-item">INSTAGRAM REELS <span class="up">▲ 1M+</span></div>
+            <div class="ticker-item">ENGAGEMENT RATE <span class="up">▲ 12.5%</span></div>
+            <div class="ticker-item">ANGEL ONE <span class="up">▲ INTERN</span></div>
+            <div class="ticker-item">NEWTON SCHOOL <span class="up">▲ INTERN</span></div>
+            <div class="ticker-item">AMAZON DATA <span class="up">▲ 99.9% ACCURACY</span></div>
+            <!-- Duplicate for seamless loop -->
+            <div class="ticker-item">YOUTUBE SHORTS <span class="up">▲ 400K+</span></div>
+            <div class="ticker-item">INSTAGRAM REELS <span class="up">▲ 1M+</span></div>
+            <div class="ticker-item">ENGAGEMENT RATE <span class="up">▲ 12.5%</span></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <i class="fas fa-chart-line"></i> HARSH BAFNA
+        </div>
+        <div class="nav-links">
+            <a href="#dashboard">Dashboard</a>
+            <a href="#portfolio">Strategies</a>
+            <a href="#experience">History</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero / Dashboard -->
+    <header class="hero" id="dashboard">
+        <div class="hero-subtitle">EST. 2025 // CONTENT STRATEGIST</div>
+        <h1>Profitable <span style="color: var(--bullish-green);">Storytelling</span></h1>
+        <p>Turning complex financial data into viral content. <br>Ex-Amazon ML Data Associate | Content Strategist at Angel One.</p>
+        
+        <div class="market-stats">
+            <div class="stat-card">
+                <span class="trend-up"><i class="fas fa-arrow-up"></i> +45%</span>
+                <span class="stat-value" data-target="1000000">0</span>
+                <span class="stat-label">Instagram Views</span>
+            </div>
+            <div class="stat-card">
+                <span class="trend-up"><i class="fas fa-arrow-up"></i> +28%</span>
+                <span class="stat-value" data-target="400000">0</span>
+                <span class="stat-label">YouTube Views</span>
+            </div>
+            <div class="stat-card">
+                <span class="trend-up"><i class="fas fa-check"></i> 100%</span>
+                <span class="stat-value" data-target="8">0</span>
+                <span class="stat-label">Team Mentored</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio">
+        <h2 class="section-title">Market Moving Content</h2>
+        <div class="portfolio-grid">
+            
+            <!-- Item 1: Pani Puri -->
+            <a href="https://www.instagram.com/finonebyangelone/reel/DOEJGxLgbOJ/" target="_blank" class="video-card">
+                <div class="thumbnail-container">
+                    <span class="overlay-badge">ECONOMICS</span>
+                    <!-- Using a relevant stock image for Pani Puri/Street Food -->
+                    <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=1000&auto=format&fit=crop" alt="Pani Puri">
+                </div>
+                <div class="card-body">
+                    <h3>Pani Puri vs. Cafe Business</h3>
+                    <p>Breakdown of unit economics. Why street vendors often have higher net margins than cafes.</p>
+                    <span class="metric-tag">Viral Hit</span>
+                </div>
+            </a>
+
+            <!-- Item 2: Harpic -->
+            <a href="https://www.instagram.com/finonebyangelone/reel/DOPy17HAcn0/" target="_blank" class="video-card">
+                <div class="thumbnail-container">
+                    <span class="overlay-badge">STRATEGY</span>
+                    <!-- Abstract Strategy/Product image -->
+                    <img src="https://images.unsplash.com/photo-1628102491629-778571d893a3?q=80&w=1000&auto=format&fit=crop" alt="Strategy">
+                </div>
+                <div class="card-body">
+                    <h3>The Harpic Pricing Strategy</h3>
+                    <p>Market penetration case study. How psychological pricing secured 70% market share.</p>
+                    <span class="metric-tag">Case Study</span>
+                </div>
+            </a>
+
+            <!-- Item 3: Germany -->
+            <a href="https://www.instagram.com/finonebyangelone/reel/DO72YzGkiKF/" target="_blank" class="video-card">
+                <div class="thumbnail-container">
+                    <span class="overlay-badge">MACRO</span>
+                    <!-- Germany/Economics image -->
+                    <img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1000&auto=format&fit=crop" alt="Germany">
+                </div>
+                <div class="card-body">
+                    <h3>Ordoliberalism Explained</h3>
+                    <p>Freedom with discipline. How post-war Germany rebuilt its economy.</p>
+                    <span class="metric-tag">Education</span>
+                </div>
+            </a>
+
+             <!-- Item 4: Personal Finance -->
+             <a href="https://www.instagram.com/finonebyangelone/reel/DO49gWEAVlO/" target="_blank" class="video-card">
+                <div class="thumbnail-container">
+                    <span class="overlay-badge">INVESTING</span>
+                    <!-- Coins/Finance image -->
+                    <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=1000&auto=format&fit=crop" alt="Finance">
+                </div>
+                <div class="card-body">
+                    <h3>Personal Finance Rules</h3>
+                    <p>Applying macro-economic principles to personal savings and investments.</p>
+                    <span class="metric-tag">Financial Literacy</span>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <h2 class="section-title">Transaction History</h2>
+        
+        <div class="experience-card">
+            <div class="exp-header">
+                <div>
+                    <div class="exp-role">Content Strategist <span class="internship-tag">INTERNSHIP</span></div>
+                    <div class="exp-company">Angel One | July 2025 - Present</div>
+                </div>
+                <i class="fas fa-briefcase" style="color: var(--angel-red);"></i>
+            </div>
+            <ul class="exp-list">
+                <li>Executed strategies for <strong>FinOne</strong> (YouTube/Insta) driving 1.4M+ combined views.</li>
+                <li>Produced "outlier" content that reset channel performance benchmarks.</li>
+                <li>Managed end-to-end podcast logistics and guest coordination.</li>
+            </ul>
+        </div>
+
+        <div class="experience-card">
+            <div class="exp-header">
+                <div>
+                    <div class="exp-role">ML Data Associate</div>
+                    <div class="exp-company">Amazon | April 2024 - July 2025</div>
+                </div>
+                <i class="fab fa-amazon" style="color: #ff9900;"></i>
+            </div>
+            <ul class="exp-list">
+                <li><strong>Rookie Rockstar Award</strong> for exceptional data accuracy.</li>
+                <li>Mentored 8 associates, improving team productivity metrics.</li>
+                <li>Collaborated with Search Human Labeled Data Team for optimization.</li>
+            </ul>
+        </div>
+
+        <div class="experience-card">
+            <div class="exp-header">
+                <div>
+                    <div class="exp-role">Video Editor <span class="internship-tag">INTERNSHIP</span></div>
+                    <div class="exp-company">Newton School | Nov 2023 - March 2024</div>
+                </div>
+                <i class="fas fa-video" style="color: var(--accent-blue);"></i>
+            </div>
+            <ul class="exp-list">
+                <li>Edited primary video content using Adobe Premiere Pro & After Effects.</li>
+                <li>Specialized in motion graphics and color grading for educational content.</li>
+            </ul>
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <h2 style="color: white;">Ready to Invest?</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">Let's compound your brand's growth.</p>
+        <div style="display: flex; gap: 20px; justify-content: center; font-size: 1.5rem;">
+            <a href="mailto:profileharshbafna@gmail.com" style="color: white;"><i class="fas fa-envelope"></i></a>
+            <a href="https://linkedin.com/in/harshbafnaa" style="color: #0077b5;"><i class="fab fa-linkedin"></i></a>
+            <a href="https://harsh.netlify.app" style="color: var(--bullish-green);"><i class="fas fa-globe"></i></a>
+        </div>
+        <p style="margin-top: 30px; font-size: 0.8rem; color: #555;">&copy; 2025 Harsh Bafna. Generated with High Yield Returns.</p>
+    </footer>
+
+    <script>
+        // Counter Logic
+        const stats = document.querySelectorAll('.stat-value');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = +entry.target.getAttribute('data-target');
+                    const duration = 1500;
+                    const increment = target / (duration / 16);
+                    
+                    let current = 0;
+                    const updateCount = () => {
+                        current += increment;
+                        if (current < target) {
+                            if(target >= 1000000) entry.target.innerText = (current/1000000).toFixed(1) + "M";
+                            else if(target >= 1000) entry.target.innerText = Math.ceil(current/1000) + "K";
+                            else entry.target.innerText = Math.ceil(current);
+                            requestAnimationFrame(updateCount);
+                        } else {
+                            if(target >= 1000000) entry.target.innerText = "1M+";
+                            else if(target >= 1000) entry.target.innerText = "400K+";
+                            else entry.target.innerText = target;
+                        }
+                    };
+                    updateCount();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        stats.forEach(stat => observer.observe(stat));
+    </script>
 </body>
 </html>
